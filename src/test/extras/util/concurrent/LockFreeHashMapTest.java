@@ -1,4 +1,4 @@
-package java.util.concurrent;
+package extras.util.concurrent;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -13,10 +13,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.concurrent.LockFreeHashMap;
 
 import org.junit.Assert;
 import org.junit.Test;
+
+import extras.util.concurrent.LockFreeHashMap;
 
 public class LockFreeHashMapTest {
 

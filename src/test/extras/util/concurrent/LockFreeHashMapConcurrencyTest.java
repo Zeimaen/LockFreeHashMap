@@ -1,4 +1,4 @@
-package java.util.concurrent;
+package extras.util.concurrent;
 
 import static org.junit.Assert.fail;
 
@@ -12,10 +12,11 @@ import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.LockFreeHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.Test;
+
+import extras.util.concurrent.LockFreeHashMap;
 
 public class LockFreeHashMapConcurrencyTest {
 
