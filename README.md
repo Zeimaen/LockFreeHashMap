@@ -13,6 +13,8 @@ thread releases the lock. As threads are never blocked, we can achieve a much hi
 than the traditional lock-based approaches. In addition, we are not limited in the number of CPU 
 cores that are utilized. Indeed, we lock-free algorithms can virtually scale to an unlimited number
 of cores.
+
+Java 7+ is a requirement.
     
 
 Implementation
@@ -63,5 +65,8 @@ Next Steps
 
 - Performance benchmarking: Compare performance to alternative hash-map implementations
 - Detailed profiling, garbage collection analysis and performance optimizations
+- Explore alternative HashMap algorithms (e.g. HopScotch hashing).
 
-Stay tuned...
+
+If you are interested in this HashMap implementation and want to contribute, feel free to 
+create a fork, submit a patch or just send me a message.  
