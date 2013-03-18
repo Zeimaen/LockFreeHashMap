@@ -1,5 +1,27 @@
 package extras.util.concurrent;
 
+/**
+ * The MIT License (MIT)
+ * Copyright (c) 2013 Simon Loesing
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy 
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights 
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell 
+ * copies of the Software, and to permit persons to whom the Software is furnished 
+ * to do so, subject to the following conditions:
+ * 
+ * The above copyright notice and this permission notice shall be included in all 
+ * copies or substantial portions of the Software.
+ * 
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
+ * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A 
+ * PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT 
+ * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
+ * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE
+ * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ */
+
 import java.lang.reflect.Field;
 import java.util.AbstractCollection;
 import java.util.AbstractSet;
@@ -598,7 +620,7 @@ public class LockFreeHashMap<K, V> implements ConcurrentMap<K, V>
      * Entry object of the hash map. Contains the key/value pair as well as metadata necessary
      * for efficient and correct processing.
      * 
-     * @author sloesing
+     * @author Simon Loesing
      *
      * @param <K> key
      * @param <V> value
@@ -678,7 +700,7 @@ public class LockFreeHashMap<K, V> implements ConcurrentMap<K, V>
     /**
      * Abstract object to iterate over the map 
      * 
-     * @author sloesing
+     * @author Simon Loesing
      */
     abstract class HashIterator
     {
@@ -746,7 +768,7 @@ public class LockFreeHashMap<K, V> implements ConcurrentMap<K, V>
     /**
      * Iterator for keys
      * 
-     * @author sloesing
+     * @author Simon Loesing
      */
     final class KeyIterator extends HashIterator implements Iterator<K>
     {
@@ -758,7 +780,7 @@ public class LockFreeHashMap<K, V> implements ConcurrentMap<K, V>
     /**
      * Iterator for values
      * 
-     * @author sloesing
+     * @author Simon Loesing
      */
     final class ValueIterator extends HashIterator implements Iterator<V>
     {
@@ -770,7 +792,7 @@ public class LockFreeHashMap<K, V> implements ConcurrentMap<K, V>
     /**
      * Iterator for entry objects
      * 
-     * @author sloesing
+     * @author Simon Loesing
      */
     final class EntryIterator extends HashIterator implements Iterator<Entry<K, V>>
     {
@@ -782,7 +804,7 @@ public class LockFreeHashMap<K, V> implements ConcurrentMap<K, V>
     /**
      * Internal iterator for hash entry objects. Used for resizing.
      * 
-     * @author sloesing
+     * @author Simon Loesing
      */
     final private class HashEntryIterator extends HashIterator implements Iterator<HashEntry<K, V>>
     {
@@ -794,7 +816,7 @@ public class LockFreeHashMap<K, V> implements ConcurrentMap<K, V>
     /**
      * Set of all keys for this map. 
      * 
-     * @author sloesing
+     * @author Simon Loesing
      */
     final class KeySet extends AbstractSet<K>
     {
@@ -833,7 +855,7 @@ public class LockFreeHashMap<K, V> implements ConcurrentMap<K, V>
     /**
      * Collection of all values for this map. 
      * 
-     * @author sloesing
+     * @author Simon Loesing
      */
     final class Values extends AbstractCollection<V>
     {
@@ -866,7 +888,7 @@ public class LockFreeHashMap<K, V> implements ConcurrentMap<K, V>
     /**
      * Set of all entries for this map. 
      * 
-     * @author sloesing
+     * @author Simon Loesing
      */
     final class EntrySet extends AbstractSet<Entry<K, V>>
     {

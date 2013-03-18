@@ -18,7 +18,7 @@ Java 7+ is a requirement.
     
 
 Implementation
-===============
+--------------
 
 For a basic explanation on how HashMaps work, please refer to the rich documentation available
 on the internet. 
@@ -42,7 +42,7 @@ successfully.
 
 
 Resizing Dynamic
-===============
+----------------
 
 By default, the HashMap is initialized with a capacity of 128 buckets. Once the map is 
 filled up to 65%, it is automatically and transparently resized. Both, parameters can
@@ -61,11 +61,12 @@ details.
 
 
 Next Steps
-===============
+----------
 
-- Performance benchmarking: Compare performance to alternative hash-map implementations
-- Detailed profiling, garbage collection analysis and performance optimizations
-- Explore alternative HashMap algorithms (e.g. HopScotch hashing).
+* Bugfixing: Right now, in rare cases updates can get lost while performing a resize. Working on a fix has high priority!  
+* Performance benchmarking: Compare performance to alternative hash-map implementations.
+* Detailed profiling, garbage collection analysis and performance optimizations.
+* Explore alternative HashMap algorithms (e.g. HopScotch hashing).
 
 
 If you are interested in this HashMap implementation and want to contribute, feel free to 
