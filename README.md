@@ -15,7 +15,15 @@ cores that are utilized. Indeed, we lock-free algorithms can virtually scale to 
 of cores.
 
 Java 7+ is a requirement.
+
     
+Usage
+-----
+
+Use the ant script to generate a jar archive that can be embedded in other java projects
+
+	ant build.xml
+
 
 Implementation
 --------------
@@ -41,7 +49,7 @@ of the two inserts. In this case, the operation is automatically retried and the
 successfully. 
 
 
-Resizing Dynamic
+Dynamic Resizing
 ----------------
 
 By default, the HashMap is initialized with a capacity of 128 buckets. Once the map is 
@@ -70,4 +78,7 @@ Next Steps
 
 
 If you are interested in this HashMap implementation and want to contribute, feel free to 
-create a fork, submit a patch or just send me a message.  
+create a fork, submit a patch or just send me a message.
+
+This source was released under the terms of [MIT](http://opensource.org/licenses/MIT) license.
+Copyright © 2013 Simon Loesing  
