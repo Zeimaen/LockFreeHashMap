@@ -19,6 +19,11 @@ import org.junit.Test;
 
 import extras.util.concurrent.LockFreeHashMap;
 
+/**
+ * Simple test cases for the LockFreeHashMap object
+ * 
+ * @author Simon Loesing
+ */
 public class LockFreeHashMapTest {
 
     //Array of values that will be put in the same bucket for map size 16

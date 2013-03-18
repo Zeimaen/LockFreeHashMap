@@ -24,7 +24,7 @@ import java.util.concurrent.ConcurrentMap;
  * use any locks and is likely to perform much better on computers of a high number 
  * of CPU cores. 
  *  
- * @author sloesing
+ * @author Simon Loesing
  * 
  * @param <K> Key object
  * @param <V> Value object

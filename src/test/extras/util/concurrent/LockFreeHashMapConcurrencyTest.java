@@ -18,6 +18,11 @@ import org.junit.Test;
 
 import extras.util.concurrent.LockFreeHashMap;
 
+/**
+ * Concurrent test cases for the LockFreeHashMap object
+ * 
+ * @author Simon Loesing
+ */
 public class LockFreeHashMapConcurrencyTest {
 
     private Random rand = new Random();
