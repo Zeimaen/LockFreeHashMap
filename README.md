@@ -16,6 +16,8 @@ of cores.
 
 Java 7+ is a requirement.
 
+This source was released under the terms of the [MIT](http://opensource.org/licenses/MIT) license.
+
     
 Usage
 -----
@@ -29,11 +31,12 @@ Implementation
 --------------
 
 For a basic explanation on how HashMaps work, please refer to the rich documentation available
-on the internet. 
+on the internet (e.g. [Wikipedia](http://en.wikipedia.org/wiki/Hash_table)). 
 
-This map is based on the straight-forward open hashing mechanism. This means, once a collision 
-occurs items are appended to the bucket and form a chain. After several collisions on a specific 
-hash-key we end up with a linked list of all the items that match this bucket.
+This map is based on the straight-forward [open hashing](http://en.wikipedia.org/wiki/Hash_table#Separate_chaining) 
+mechanism. This means, once a collision occurs items are appended to the bucket and form a chain. 
+After several collisions on a specific hash-key we end up with a linked list of all the items 
+that match this bucket.
 
 To read an item, we identify the corresponding bucket an iterate through the item chain until we 
 find the matching key and return the associated value. If the key is not found, a null-value is 
@@ -80,5 +83,4 @@ Next Steps
 If you are interested in this HashMap implementation and want to contribute, feel free to 
 create a fork, submit a patch or just send me a message.
 
-This source was released under the terms of [MIT](http://opensource.org/licenses/MIT) license.
 Copyright © 2013 Simon Loesing  
