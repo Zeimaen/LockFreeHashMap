@@ -56,8 +56,8 @@ Dynamic Resizing
 ----------------
 
 By default, the HashMap is initialized with a capacity of 128 buckets. Once the map is 
-filled up to 65%, it is automatically and transparently resized. Both, parameters can
-be modified at construction. 
+filled up to 65%, it is automatically and transparently resized. Both parameters can
+be changed at construction. 
 
 During resizing, a new bucket array with twice the size of the previous one is created. 
 All items in the original array are re-hashed and inserted into the new map. Once
