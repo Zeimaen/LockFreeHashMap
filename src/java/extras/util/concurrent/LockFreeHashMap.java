@@ -33,19 +33,15 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 
 /**
- * A lock free concurrent hash-map implementation with dynamic resizing. 
+ * A lock free concurrent hash-map implementation with dynamic resizing.
  * 
- * By default the hash-map is initialized with a capacity of 128 and a resize factor of 0.65. 
- * This means, once the size of the map reaches 65% of it's capacity, the map is dynamically 
- * resized. Resizing is completely transparent. Custom initial capacity and resize factor 
- * can be specified in the constructor.
+ * By default the hash-map is initialized with a capacity of 128 and a resize factor of 0.65. This means, once the size of the map reaches 65% of it's capacity, the map is dynamically resized. Resizing is completely transparent. Custom initial capacity and resize factor can be specified in the
+ * constructor.
  * 
  * This object is thread-safe and can be accessed by multiple threads concurrently.
- *   
- * Compared to {@link java.util.concurrent.ConcurrentHashMap} this object does not 
- * use any locks and is likely to perform much better on computers of a high number 
- * of CPU cores. 
- *  
+ * 
+ * Compared to {@link java.util.concurrent.ConcurrentHashMap} this object does not use any locks and is likely to perform much better on computers of a high number of CPU cores.
+ * 
  * @author Simon Loesing
  * 
  * @param <K> Key object
@@ -79,9 +75,9 @@ public class LockFreeHashMap<K, V> implements ConcurrentMap<K, V>
     }
 
     /**
-     * Create a new hash-map with the specified constructor parameters 
+     * Create a new hash-map with the specified constructor parameters
      * 
-     * @param initialCapacity 
+     * @param initialCapacity
      * @param isResizable false to deactivate resizing
      */
     public LockFreeHashMap(int initialCapacity, boolean isResizable) {
@@ -125,7 +121,6 @@ public class LockFreeHashMap<K, V> implements ConcurrentMap<K, V>
         decSize(UNSAFE.getIntVolatile(this, SIZE_OFFSET));
     }
 
-
     /**
      * Verifies if a key is already present in the map
      * 
@@ -141,7 +136,7 @@ public class LockFreeHashMap<K, V> implements ConcurrentMap<K, V>
      * Verifies if a value is already present in the map
      * 
      * @param v value
-     * @return true if the value is present, otherwise false 
+     * @return true if the value is present, otherwise false
      */
     @SuppressWarnings("unchecked")
     @Override
@@ -162,10 +157,8 @@ public class LockFreeHashMap<K, V> implements ConcurrentMap<K, V>
     }
 
     /**
-     * Retrieves the key-set of the map. 
-     * The key set points to the current content of the map. Changes in the map are immediately visible in the set. 
-     * As well, all operations executed on the set are directly applied to the map.
-     *   
+     * Retrieves the key-set of the map. The key set points to the current content of the map. Changes in the map are immediately visible in the set. As well, all operations executed on the set are directly applied to the map.
+     * 
      * @return Set with all keys
      */
     @Override
@@ -176,10 +169,8 @@ public class LockFreeHashMap<K, V> implements ConcurrentMap<K, V>
     }
 
     /**
-     * Retrieves all the values of the map. 
-     * The collection points to the current content of the map. Changes in the map are immediately visible. 
-     * As well, all operations executed on the coolection are directly applied to the map.
-     *  
+     * Retrieves all the values of the map. The collection points to the current content of the map. Changes in the map are immediately visible. As well, all operations executed on the coolection are directly applied to the map.
+     * 
      * @return Collection with all values
      */
     @Override
@@ -190,10 +181,8 @@ public class LockFreeHashMap<K, V> implements ConcurrentMap<K, V>
     }
 
     /**
-     * Retrieves all key/value pairs of the map. 
-     * The entry set points to the current content of the map. Changes in the map are immediately visible in the set. 
-     * As well, all operations executed on the set are directly applied to the map.
-     *  
+     * Retrieves all key/value pairs of the map. The entry set points to the current content of the map. Changes in the map are immediately visible in the set. As well, all operations executed on the set are directly applied to the map.
+     * 
      * @return Collection with all values
      */
     public Set<Entry<K, V>> entrySet() {
@@ -268,7 +257,7 @@ public class LockFreeHashMap<K, V> implements ConcurrentMap<K, V>
         if (key == null || value == null)
             return null;
 
-        return put(key, value, 0, false, false, null, false);
+        return put(key, value, false, false, null);
     }
 
     /**
@@ -276,21 +265,20 @@ public class LockFreeHashMap<K, V> implements ConcurrentMap<K, V>
      * 
      * @param key
      * @param value
-     * @return V current value if the key is already present, null otherwise 
+     * @return V current value if the key is already present, null otherwise
      */
     @Override
     public V putIfAbsent(K key, V value) {
         if (key == null || value == null)
             return null;
 
-        return put(key, value, 0, true, false, null, false);
+        return put(key, value, true, false, null);
     }
 
     /**
-     * Inserts all the entries of an existing map. This operation is not atomic. 
-     * All entries are inserted sequentially
+     * Inserts all the entries of an existing map. This operation is not atomic. All entries are inserted sequentially
      * 
-     * @param map to insert 
+     * @param map to insert
      */
     @Override
     public void putAll(Map<? extends K, ? extends V> map) {
@@ -304,15 +292,13 @@ public class LockFreeHashMap<K, V> implements ConcurrentMap<K, V>
      * 
      * @param key
      * @param value
-     * @param hash value of the key
      * @param onlyIfAbsent boolean
-     * @param onlyReplace boolean  
+     * @param onlyReplace boolean
      * @param oldValue only used for replace
-     * @param partOfResize internal flag to specify that the put is part of a resize operation
      * @return
      */
     @SuppressWarnings("unchecked")
-    private final V put(K key, V value, int hash, boolean onlyIfAbsent, boolean onlyReplace, V oldValue, boolean partOfResize) {
+    private final V put(K key, V value, boolean onlyIfAbsent, boolean onlyReplace, V oldValue) {
         // First check if we need to resize
         if (isResizable)
             checkResize();
@@ -321,14 +307,13 @@ public class LockFreeHashMap<K, V> implements ConcurrentMap<K, V>
         HashEntry<K, V>[] dataArr = (isResizing()) ? data_new : data;
 
         // Calculate hash
-        if (hash == 0)
-            hash = hash(key.hashCode());
+        int hash = hash(key.hashCode());
         long offset = V_BASE + (V_SIZE * (hash % dataArr.length));
 
         // Iterate until element is found or not
         HashEntry<K, V> prevEntry, currentEntry;
         HashEntry<K, V> oldEntry = null;
-        HashEntry<K, V> newEntry = new HashEntry<K, V>(hash, key, value); // TODO
+        HashEntry<K, V> newEntry = new HashEntry<K, V>(hash, key, value);
 
         while (true) {
             // Get current bucket entry
@@ -336,10 +321,10 @@ public class LockFreeHashMap<K, V> implements ConcurrentMap<K, V>
             // Check if we can set new value. (Repeat if CAS fails)
             if (currentEntry == null) {
                 if (!onlyReplace) {
-                    if (!UNSAFE.compareAndSwapObject(dataArr, offset, currentEntry, newEntry))
+                    if (!UNSAFE.compareAndSwapObject(dataArr, offset, currentEntry, newEntry)) {
                         continue;
-                    if (!partOfResize)
-                        incSize(1);
+                    }
+                    incSize(1);
                 }
                 return null;
             }
@@ -347,10 +332,10 @@ public class LockFreeHashMap<K, V> implements ConcurrentMap<K, V>
             if (currentEntry.isDeleted()) {
                 HashEntry<K, V> nextEntry = currentEntry.getNext();
                 if (nextEntry == null) {
-                    if (!UNSAFE.compareAndSwapObject(dataArr, offset, currentEntry, newEntry))
+                    if (!UNSAFE.compareAndSwapObject(dataArr, offset, currentEntry, newEntry)) {
                         continue;
-                    if (!partOfResize)
-                        incSize(1);
+                    }
+                    incSize(1);
                     return null;
                 } else {
                     if (!UNSAFE.compareAndSwapObject(dataArr, offset, currentEntry, nextEntry))
@@ -374,7 +359,7 @@ public class LockFreeHashMap<K, V> implements ConcurrentMap<K, V>
             if (currentEntry.getNext() == null) {
                 if (!onlyReplace || (onlyReplace && oldEntry != null)) {
                     if (currentEntry.replaceNext(null, newEntry)) {
-                        if (oldEntry == null && !partOfResize)
+                        if (oldEntry == null)
                             incSize(1);
                         break;
                     }
@@ -454,7 +439,7 @@ public class LockFreeHashMap<K, V> implements ConcurrentMap<K, V>
      */
     @SuppressWarnings("unchecked")
     private final V remove(K key, int hash, V value, boolean verify) {
-        //In case a resize is currently happening, try to delete entry on the old array. Only use new array to verify a remove 
+        // In case a resize is currently happening, try to delete entry on the old array. Only use new array to verify a remove
         HashEntry<K, V>[] dataArr = (isResizing() && verify) ? data_new : data;
         long offset = V_BASE + (V_SIZE * (hash % dataArr.length));
         HashEntry<K, V> entry = (HashEntry<K, V>) UNSAFE.getObjectVolatile(dataArr, offset);
@@ -467,12 +452,12 @@ public class LockFreeHashMap<K, V> implements ConcurrentMap<K, V>
             } else if (!entry.isDeleted() && (entry.key == key || (entry.hash == hash && key.equals(entry.key))) && (value == null || entry.value == value || value.equals(entry.value))) {
                 if (entry.setDeleted(0, 1)) {
                     if (entry.isIsResized()) {
-                        //The entry could have been moved to a new resized map. Verify delete
+                        // The entry could have been moved to a new resized map. Verify delete
                         V returnVal = remove(key, hash, value, true);
-                        if(returnVal != null) {
+                        if (returnVal != null) {
                             return returnVal;
                         }
-                    }                     
+                    }
                     decSize(1);
                     return entry.value;
                 }
@@ -480,15 +465,14 @@ public class LockFreeHashMap<K, V> implements ConcurrentMap<K, V>
             }
             entry = entry.getNext();
         }
-        
+
         return null;
     }
 
     /**
-     * Replaces the value associated to a key in the map. 
-     * The replace operation is only executed if the key is already present in the map 
+     * Replaces the value associated to a key in the map. The replace operation is only executed if the key is already present in the map
      * 
-     * @param key 
+     * @param key
      * @param value replacement
      * @return V old value if key was already present, null otherwise
      */
@@ -497,15 +481,13 @@ public class LockFreeHashMap<K, V> implements ConcurrentMap<K, V>
         if (key == null || value == null)
             return null;
 
-        return put(key, value, 0, false, true, null, false);
+        return put(key, value, false, true, null);
     }
 
     /**
-     * Replaces the value associated to a key in the map. 
-     * The replace operation is only executed if the key is already present and the 
-     * current value is equal to passed oldValue parameter. 
+     * Replaces the value associated to a key in the map. The replace operation is only executed if the key is already present and the current value is equal to passed oldValue parameter.
      * 
-     * @param key 
+     * @param key
      * @param oldValue
      * @param newValue replacement
      * @return boolean true if replace was successful
@@ -515,7 +497,7 @@ public class LockFreeHashMap<K, V> implements ConcurrentMap<K, V>
         if (key == null || oldValue == null || newValue == null)
             return false;
 
-        return oldValue.equals(put(key, newValue, 0, false, true, oldValue, false));
+        return oldValue.equals(put(key, newValue, false, true, oldValue));
     }
 
     /**
@@ -539,14 +521,13 @@ public class LockFreeHashMap<K, V> implements ConcurrentMap<K, V>
     }
 
     /**
-     * Internal hash function
-     * Spread bits to regularize both segment and index locations using Wang/Jenkins hash.
+     * Internal hash function Spread bits to regularize both segment and index locations using Wang/Jenkins hash.
      * 
      * @param h
      * @return int hash value
      */
     private static int hash(int h) {
-        
+
         h += (h << 15) ^ 0xffffcd7d;
         h ^= (h >>> 10);
         h += (h << 3);
@@ -586,7 +567,7 @@ public class LockFreeHashMap<K, V> implements ConcurrentMap<K, V>
     }
 
     /**
-     * Internal method that executes a resize operation if required 
+     * Internal method that executes a resize operation if required
      */
     @SuppressWarnings("unchecked")
     private final void checkResize() {
@@ -608,13 +589,44 @@ public class LockFreeHashMap<K, V> implements ConcurrentMap<K, V>
                     while (it.hasNext()) {
                         HashEntry<K, V> e = it.next();
                         e.setIsResized();
-                        put(e.key, e.value, e.hash, true, false, null, true);
+
+                        // Put in new array
+                        long offset = V_BASE + (V_SIZE * (e.hash % data_new.length));
+                        HashEntry<K, V> currentEntry;
+                        HashEntry<K, V> newEntry = new HashEntry<K, V>(e.hash, e.key, e.value);
+
+                        while (true) {
+                            // Get current bucket entry
+                            currentEntry = (HashEntry<K, V>) UNSAFE.getObjectVolatile(data_new, offset);
+                            // Check if we can set new value. (Repeat if CAS fails)
+                            if (currentEntry == null || (currentEntry.isDeleted() && currentEntry.getNext() == null)) {
+                                if (UNSAFE.compareAndSwapObject(data_new, offset, currentEntry, newEntry)) {
+                                    break;
+                                }
+                                continue; // CAS failed, try again
+                            }
+                            
+                            // Bucket already in use, lets check the chain
+                            while (true) {
+                                if (currentEntry.getNext() == null) {
+                                    if (currentEntry.replaceNext(null, newEntry)) {
+                                        break;
+                                    }
+                                    continue; // CAS failed, try again
+                                }
+                                currentEntry = currentEntry.getNext();
+                            }
+                            
+                            //The entry should be inserted
+                            break;
+                        }
+
                         e.setDeleted(0, 1);
                     }
 
-                    //Update data array
+                    // Update data array
                     data = data_new;
-                    
+
                     UNSAFE.putIntVolatile(this, RESIZE_LOCK_OFFSET, 0);
                 }
             }
@@ -629,23 +641,22 @@ public class LockFreeHashMap<K, V> implements ConcurrentMap<K, V>
     private final boolean isResizing() {
         return data_new != null && UNSAFE.getIntVolatile(this, RESIZE_LOCK_OFFSET) == 1;
     }
-    
+
     /**
      * Internal function to check if the map has been resized
      * 
      * @param dataRef reference to the data array to check against
      * @return true if resize operation has happened
      */
-    private final boolean hasResized(HashEntry<K,V>[] dataRef) {
+    private final boolean hasResized(HashEntry<K, V>[] dataRef) {
         return (dataRef.length != data.length);
     }
 
     /**
-     * Entry object of the hash map. Contains the key/value pair as well as metadata necessary
-     * for efficient and correct processing.
+     * Entry object of the hash map. Contains the key/value pair as well as metadata necessary for efficient and correct processing.
      * 
      * @author Simon Loesing
-     *
+     * 
      * @param <K> key
      * @param <V> value
      */
@@ -708,13 +719,13 @@ public class LockFreeHashMap<K, V> implements ConcurrentMap<K, V>
                 return true;
             return false;
         }
-        
+
         final void setIsResized() {
             UNSAFE.putBooleanVolatile(this, isResizedOffset, true);
         }
 
         final boolean isIsResized() {
-            return UNSAFE.getBooleanVolatile(this, isResizedOffset);            
+            return UNSAFE.getBooleanVolatile(this, isResizedOffset);
         }
 
         private static final long nextOffset;
@@ -734,7 +745,7 @@ public class LockFreeHashMap<K, V> implements ConcurrentMap<K, V>
     }
 
     /**
-     * Abstract object to iterate over the map 
+     * Abstract object to iterate over the map
      * 
      * @author Simon Loesing
      */
@@ -850,7 +861,7 @@ public class LockFreeHashMap<K, V> implements ConcurrentMap<K, V>
     }
 
     /**
-     * Set of all keys for this map. 
+     * Set of all keys for this map.
      * 
      * @author Simon Loesing
      */
@@ -889,7 +900,7 @@ public class LockFreeHashMap<K, V> implements ConcurrentMap<K, V>
     }
 
     /**
-     * Collection of all values for this map. 
+     * Collection of all values for this map.
      * 
      * @author Simon Loesing
      */
@@ -922,7 +933,7 @@ public class LockFreeHashMap<K, V> implements ConcurrentMap<K, V>
     }
 
     /**
-     * Set of all entries for this map. 
+     * Set of all entries for this map.
      * 
      * @author Simon Loesing
      */
